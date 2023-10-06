@@ -9,78 +9,78 @@ def user_error(func):
         try:
             return func(*args)
         except IndexError:
-            return "Not enough params.\nFormat: '<command> <Name> <Phone>'\nUse 'help' for information"
+            return "Not enough params.\nFormat: '<command> <name> <phone>'\nUse 'help' for information"
         except KeyError:
-            return f"Unknown Name {args[0]}. Try another or use help."
+            return f"Unknown name {args[0]}. Try another or use help."
         # except UnboundLocalError:
-        #     return f"Unknown Name {args[0]}. Try another or use help."
+        #     return f"Unknown name {args[0]}. Try another or use help."
     return inner
 
 
 @user_error
 def add_record(*args):
     
-    Name = args[0]
-    Phone = sanitize_phone_number(args[1])
-    phonebook[Name] = Phone
-    result = f"Add record:  {Name = }, {Phone = }"
+    name = args[0]
+    phone = sanitize_phone_number(args[1])
+    phonebook[name] = phone
+    result = f"Add record:  {name = }, {phone = }"
     return result
 
 
 @user_error
 def change_record(*args):
 
-    Name = args[0]
-    Phone = sanitize_phone_number(args[1])
-    rec = phonebook[Name]
+    name = args[0]
+    phone = sanitize_phone_number(args[1])
+    rec = phonebook[name]
     if rec:
-        phonebook[Name] = Phone
-        return f"Change record:  {Name = }, new{Phone = }"
+        phonebook[name] = phone
+        return f"Change record:  {name = }, new{phone = }"
 
 
 @user_error
 def delete_record(*args):
 
-    Name = args[0]
-    Phone = sanitize_phone_number(args[1])
-    rec = phonebook[Name]
+    name = args[0]
+    phone = sanitize_phone_number(args[1])
+    rec = phonebook[name]
     if rec:
-        phonebook.pop(Name)
-        return f"Record has been deleted:  {Name = }, {Phone = }"
+        phonebook.pop(name)
+        return f"Record has been deleted:  {name = }, {phone = }"
 
 
 @user_error
 def find_phone(*args):
 
-    for Name, Phone in phonebook.items():
-        if args[0] == Name:
-            return f"{Name} has a phone number {Phone}"
-    return "no such Name"
+    for name, phone in phonebook.items():
+        if args[0] == name:
+            return f"{name} has a phone number {phone}"
+    return "no such name"
 
 @user_error
 def find_name(*args):
 
-    for Name, Phone in phonebook.items():
-        if args[0] == Phone:
-            return f"{Name} has a phone number {Phone}"
-    return "no such Phone number"
+    for name, phone in phonebook.items():
+        if args[0] == phone:
+            return f"{name} has a phone number {phone}"
+    return "no such phone number"
 
 
-def show_all():
+def show_all(*args):
     temp_list = ["\tName\t\tPhone"]
     i = 0
-    for Name, Phone in phonebook.items():
+    for name, phone in phonebook.items():
         i += 1
-        temp_list.append(f"{i:>{3}}. {Name:<{15}}{Phone:<15}")
+        temp_list.append(f"{i:>{3}}. {name:<{15}}{phone:<15}")
     result = "\n".join(temp_list)
     if i == 0:
         result = "\tNothing to output"
     return result
 
 
-def help_page():
+def help_page(*args):
     
-    help_list = ["\tPhoneBook\tversion 1.2.2"]
+    help_list = ["\tPhoneBook\tversion 1.2.3"]
     help_list.append('add record <name> <phone>     - add a new name with a phone number')
     help_list.append('change record <name> <phone>  - change the phone number for an existing record')
     help_list.append('delete record <name> <phone>  - delete an existing record')    
