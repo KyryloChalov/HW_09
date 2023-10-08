@@ -1,5 +1,7 @@
 from phone_sanitize import sanitize_phone_number
 
+title = "\tPhoneBook\tversion 1.3.2"
+
 phonebook = {}
 
 
@@ -12,8 +14,6 @@ def user_error(func):
             return "Not enough params.\nFormat: '<command> <name> <phone>'\nUse 'help' for information"
         except KeyError:
             return f"Unknown name {args[0]}. Try another or use help."
-        # except UnboundLocalError:
-        #     return f"Unknown name {args[0]}. Try another or use help."
     return inner
 
 
@@ -22,9 +22,12 @@ def add_record(*args):
     
     name = args[0]
     phone = sanitize_phone_number(args[1])
-    phonebook[name] = phone
-    result = f"Add record:  {name = }, {phone = }"
-    return result
+    is_exist = phonebook.get(name, None)
+    if is_exist:
+        return f"Record:  {name = } already exist with the phone = {phonebook.get(name)}.\n\tUse 'change record' command to change or 'delete record' to delete record"
+    else:
+        phonebook[name] = phone
+        return f"Add record:  {name = }, {phone = }"
 
 
 @user_error
@@ -80,7 +83,7 @@ def show_all(*args):
 
 def help_page(*args):
     
-    help_list = ["\tPhoneBook\tversion 1.2.3"]
+    help_list = [title]
     help_list.append('add record <name> <phone>     - add a new name with a phone number')
     help_list.append('change record <name> <phone>  - change the phone number for an existing record')
     help_list.append('delete record <name> <phone>  - delete an existing record')    
@@ -126,6 +129,7 @@ def parser(text: str):
 
 
 def main():
+    print("\n" + title + "\t\tType 'help' for information")
     while True:
         user_input = input(">>>").strip().lower()
         func, data = parser(user_input)
